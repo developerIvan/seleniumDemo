@@ -1,9 +1,12 @@
 package com.e2e.specs;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
-
-
+import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
@@ -14,9 +17,41 @@ import com.e2e.pageobjecs.Country;
 
 public class CountrySpec {
 	public static void main(String[] args){
-		System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver.exe");
-		WebDriver chromeDriver = new ChromeDriver();
-		Country country = new Country(chromeDriver);
+	    String driverPath = null;
+	    Properties mainProperties = new Properties();
+	    InputStream input = null;
+	    String stringPath = null;
+	    StringBuilder sBuilder = null;
+        try{
+        	
+        	//Gets the current path or directory of the file or project
+        	stringPath = Paths.get("").toAbsolutePath().toString();
+        	System.out.println("Current relative path is: " + stringPath);
+        	sBuilder = new StringBuilder(stringPath);
+        	sBuilder.append("\\project.properties");
+        	stringPath = sBuilder.toString();
+        	System.out.println("properties location is: " + stringPath); 
+          input = new FileInputStream(stringPath);
+          mainProperties.load(input);
+    	  driverPath = mainProperties.getProperty("chrome.driver.path");
+      } catch (IOException e) {
+    	  e.printStackTrace();
+	  }finally{
+		  if(input!=null){
+			  try{
+				  input.close();
+			  }catch(IOException e){
+				  System.out.println("Error while trying to close input ".concat(e.getMessage()));
+			  }
+		  }
+	  }
+		
+  	  System.out.println("\n Chorme driver path ".concat(driverPath));
+	  System.setProperty("webdriver.chrome.driver",driverPath);
+	  System.out.println(System.getProperty("webdriver.chrome.driver"));
+	  
+	  WebDriver chromeDriver = new ChromeDriver();
+	  Country country = new Country(chromeDriver);
 		
        
 		Map<Integer, String> stateMap = country.getStatesList();
