@@ -3,14 +3,12 @@ package com.e2e.pageobjecs;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -25,21 +23,19 @@ public class Country {
 	WebElement dropdownCountry;
 	List<WebElement> dropdownCountrys;
 	Map <Integer, String>provinciasMap;
-	
+
 	String state = "";
 	Select dropDown;
 	public Country(WebDriver driver){
 		this.driver = driver;
+		driver.get("https://www.correos.go.cr/");
 		provinciasMap = new HashMap<Integer, String>();
 	}
-
 
 	/**
 	 * Function to navigate trough  web site  to get the postal code search frame
 	 */
 	private void redirectToPostalCodeSearchPage(){
-		driver.get("https://www.correos.go.cr/");
-	
 		element = driver.findElements(By.cssSelector("#MenuTopContainer .itemContent .menuTextContainer")).get(3);
 		
 		//Go to "codigo postal" page
@@ -66,8 +62,6 @@ public class Country {
 				provinciasMap.put(Integer.parseInt(optionElement.getAttribute("value")), state);
 			}
 		}
-	    
-		
 		//Returning to main page
 		driver.switchTo().defaultContent();
 		
