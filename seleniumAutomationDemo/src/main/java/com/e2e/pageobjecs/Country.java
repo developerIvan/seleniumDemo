@@ -23,11 +23,12 @@ public class Country {
 	WebElement dropdownCountry;
 	List<WebElement> dropdownCountrys;
 	Map <Integer, String>provinciasMap;
-	
+
 	String state = "";
 	Select dropDown;
 	public Country(WebDriver driver){
 		this.driver = driver;
+		driver.get("https://www.correos.go.cr/");
 		provinciasMap = new HashMap<Integer, String>();
 	}
 
@@ -35,8 +36,6 @@ public class Country {
 	 * Function to navigate trough  web site  to get the postal code search frame
 	 */
 	private void redirectToPostalCodeSearchPage(){
-		driver.get("https://www.correos.go.cr/");
-	
 		element = driver.findElements(By.cssSelector("#MenuTopContainer .itemContent .menuTextContainer")).get(3);
 		
 		//Go to "codigo postal" page
@@ -63,8 +62,6 @@ public class Country {
 				provinciasMap.put(Integer.parseInt(optionElement.getAttribute("value")), state);
 			}
 		}
-	    
-		
 		//Returning to main page
 		driver.switchTo().defaultContent();
 		
