@@ -6,12 +6,14 @@ import java.util.Map;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.e2e.pageobjecs.Country;
+import com.e2e.util.HelperUtil;
 
 
 
@@ -32,14 +34,14 @@ public class CountryTest {
 	}
  
 	
-	@BeforeMethod
-	public void beforeMethod() {
-		System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver.exe");
+	@BeforeClass
+	public void setUp() {
+	    HelperUtil.setDriverLocation();
 		driver = new ChromeDriver();
 		country = new Country(driver);
 	}
  
-	@AfterMethod
+	@AfterClass
 	public void afterMethod() {
 		driver.close();
 	}

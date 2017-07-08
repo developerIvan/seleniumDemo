@@ -16,7 +16,10 @@ import java.util.Properties;
  */
 public class HelperUtil {
 	private static String OS = System.getProperty("os.name").toLowerCase();
-	
+    private static String expectedPostalCode;
+    private static String expectedProvinceOne, expectedProvinceTwo,expectedProvinceThree, expectedProvinceFour, expectedProvinceFive,expectedProvinceSix, expectedProvinceSeven;
+
+
 	/**
 	 * 
 	 */
@@ -39,6 +42,8 @@ public class HelperUtil {
 	          input = new FileInputStream(stringPath);
 	          mainProperties.load(input);
 	    	  driverPath = mainProperties.getProperty("chrome.driver.path");
+	    	  //Prepare test environment properties
+	    	  setTestProperties(mainProperties);
 	      } catch (IOException e) {
 	    	  e.printStackTrace();
 		  }finally{
@@ -50,12 +55,12 @@ public class HelperUtil {
 				  }
 			  }
 		  }
-		
+
 	      System.out.println("\n Chorme driver path ".concat(driverPath));
 	  	  System.setProperty("webdriver.chrome.driver",driverPath);
 	  	  System.out.println(System.getProperty("webdriver.chrome.driver"));
 	}
-	
+
 	/**
 	 * @return the properties file location sub child directory 
 	 * depending on current OS
@@ -82,5 +87,52 @@ public class HelperUtil {
 			break;
 		}
 		return pathAppender;
+	}
+
+	/**
+	 * Prepares the environment global variables for the test
+	 * @param properties
+	 */
+	private static void setTestProperties( Properties properties){
+		expectedPostalCode = properties.getProperty("environment.postal.code");
+		expectedProvinceOne = properties.getProperty("environment.province.1");
+		expectedProvinceTwo= properties.getProperty("environment.province.2");
+		expectedProvinceThree = properties.getProperty("environment.province.3");
+		expectedProvinceFour = properties.getProperty("environment.province.4");
+		expectedProvinceFive = properties.getProperty("environment.province.5");
+		expectedProvinceSix = properties.getProperty("environment.province.6");
+		expectedProvinceSeven = properties.getProperty("environment.province.7");
+	}
+
+	public static String getExpectedPostalCode(){
+		return expectedPostalCode;
+	}
+
+	public static String getExpectedProvinceOne() {
+		return expectedProvinceOne;
+	}
+
+	public static String getExpectedProvinceTwo() {
+		return expectedProvinceTwo;
+	}
+
+	public static String getExpectedProvinceThree() {
+		return expectedProvinceThree;
+	}
+
+	public static String getExpectedProvinceFour() {
+		return expectedProvinceFour;
+	}
+
+	public static String getExpectedProvinceFive() {
+		return expectedProvinceFive;
+	}
+
+	public static String getExpectedProvinceSix() {
+		return expectedProvinceSix;
+	}
+
+	public static String getExpectedProvinceSeven() {
+		return expectedProvinceSeven;
 	}
 }

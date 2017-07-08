@@ -20,16 +20,16 @@ public class CountrySpec {
     	Map<Integer, String> stateMap = country.getStatesList();
 
 		//Asserting all   states are found
-		Assert.assertEquals(stateMap.get(1), "San José");
-		Assert.assertEquals(stateMap.get(2), "Alajuela");
-		Assert.assertEquals(stateMap.get(3), "Cartago");
-		Assert.assertEquals(stateMap.get(4), "Heredia");
-		Assert.assertEquals(stateMap.get(5), "Guanacaste");
-		Assert.assertEquals(stateMap.get(6), "Puntarenas");
-		Assert.assertEquals(stateMap.get(7), "Limón");
+		Assert.assertEquals(stateMap.get(1), HelperUtil.getExpectedProvinceOne());
+		Assert.assertEquals(stateMap.get(2), HelperUtil.getExpectedProvinceTwo());
+		Assert.assertEquals(stateMap.get(3), HelperUtil.getExpectedProvinceThree());
+		Assert.assertEquals(stateMap.get(4), HelperUtil.getExpectedProvinceFour());
+		Assert.assertEquals(stateMap.get(5), HelperUtil.getExpectedProvinceFive());
+		Assert.assertEquals(stateMap.get(6), HelperUtil.getExpectedProvinceSix());
+		Assert.assertEquals(stateMap.get(7), HelperUtil.getExpectedProvinceSeven());
 
 		String postalCode = country.getPostalCode();
-		Assert.assertEquals("21101", postalCode);
+		Assert.assertEquals(HelperUtil.getExpectedPostalCode(), postalCode);
 		//close browser
 		chromeDriver.quit();
 	}
