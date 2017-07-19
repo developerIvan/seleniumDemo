@@ -3,6 +3,7 @@ package com.e2e.pageobjecs;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 
@@ -19,6 +20,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Country {
 	WebDriver driver;
+	public WebDriver getDriver() {
+		return driver;
+	}
+	public void setDriver(WebDriver driver) {
+		this.driver = driver;
+	}
+
 	WebElement element;
 	WebElement dropdownCountry;
 	List<WebElement> dropdownCountrys;
@@ -28,19 +36,29 @@ public class Country {
 	Select dropDown;
 	public Country(WebDriver driver){
 		this.driver = driver;
+
 		driver.get("https://www.correos.go.cr/");
 		provinciasMap = new HashMap<Integer, String>();
 	}
 
+	public Country(WebDriver driver,int implTimeout){
+		this.driver = driver;
+		driver.navigate().to("https://www.correos.go.cr/");
+		driver.manage().timeouts().implicitlyWait(implTimeout, TimeUnit.SECONDS);
+		driver.manage().window().maximize();
+		provinciasMap = new HashMap<Integer, String>();    
+	}
 	/**
 	 * Function to navigate trough  web site  to get the postal code search frame
 	 */
 	private void redirectToPostalCodeSearchPage(){
+		/*WebDriverWait wait = new WebDriverWait(driver, 20);
+	   element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='MenuTopContainer']/div/div/ul/li[7]/div/a/span")));*/
 		element = driver.findElements(By.cssSelector("#MenuTopContainer .itemContent .menuTextContainer")).get(3);
-		
+
 		//Go to "codigo postal" page
 		element.click();
-		
+
 		//Go to search 'codigo postal' page
 		element = driver.findElements(By.cssSelector("#ContextMenuContainer #Menu_Contextual .itemContent a")).get(1);
 		element.click();
@@ -48,11 +66,11 @@ public class Country {
 
 	public Map <Integer, String> getStatesList(){
 		redirectToPostalCodeSearchPage();
-		
-        //Switch to frame in where the form is located 
-        driver.switchTo().frame(0);
+
+		//Switch to frame in where the form is located 
+		driver.switchTo().frame(0);
 		dropDown = getSelectDropDownElement(driver,"ddl_provincia", 2); 
-        
+
 		//Loading map for verification
 		for(WebElement optionElement:dropDown.getOptions()){
 			state = optionElement.getText();
@@ -64,7 +82,7 @@ public class Country {
 		}
 		//Returning to main page
 		driver.switchTo().defaultContent();
-		
+
 		return provinciasMap;
 	}
 
@@ -72,31 +90,30 @@ public class Country {
 		String postalCode = null; 
 		redirectToPostalCodeSearchPage();
 		//Switch to frame in where the form is located 
-         driver.switchTo().frame(0);
-	
-       
-      //Get the select tag using xpath
-		//WebElement dropDownElement = new Select( driver.findElement(By.xpath("//*[@id='content']/div/div/table/tbody/tr/td/center/form/table[1]/tbody/tr[2]/td[1]/select"));
-        dropDown = this.getSelectDropDownElement(driver, "[name='ddl_provincia']", 0);
-     
+		driver.switchTo().frame(0);
+
+
+		//Get the select tag using xpath
+		dropDown = this.getSelectDropDownElement(driver, "[name='ddl_provincia']", 0);
+
 		dropDown.selectByIndex(2);
-		
+
 		//Selecting "cantones" or subStates
 		dropDown = this.getSelectDropDownElement(driver, "//*[@id='ddl_canton']", 1); 
 
 		//  dropDown = new Select( driver.findElement(By.xpath("//*[@id='ddl_canton']")));
 		dropDown.selectByValue("211");
 
-		 //Selecting city drop down 	  
-		 dropDown = this.getSelectDropDownElement(driver, "ddl_distrito", 3);
-		 dropDown.selectByVisibleText("Zarcero");
-	 
-		 postalCode = driver.findElement(By.id("lbl_codigo_postal")).getText();
-		 
+		//Selecting city drop down 	  
+		dropDown = this.getSelectDropDownElement(driver, "ddl_distrito", 3);
+		dropDown.selectByVisibleText("Zarcero");
+
+		postalCode = driver.findElement(By.id("lbl_codigo_postal")).getText();
+
 		//Exiting the frame
-		 driver.switchTo().defaultContent();
-		 
-		 return postalCode;
+		driver.switchTo().defaultContent();
+
+		return postalCode;
 	}
 
 	/**
@@ -113,22 +130,22 @@ public class Country {
 	private Select getSelectDropDownElement(WebDriver driver, String locatorValue, int locatorType){
 		Select selectElement = null;
 		switch(locatorType){
-		  case 0: 
-			  selectElement =  new Select((new WebDriverWait(driver, 12))
-					  .until(ExpectedConditions.elementToBeClickable(By.cssSelector(locatorValue))));
-			  break;
-		  case 1:	  
-			  selectElement = new Select((new WebDriverWait(driver, 12))
-			  .until(ExpectedConditions.elementToBeClickable(By.xpath(locatorValue))));
-			  break;
-		  case 2:	  
-			  selectElement = new Select( (new WebDriverWait(driver, 12))
-					  .until(ExpectedConditions.elementToBeClickable(By.name(locatorValue))));
-			  break;
-		  case 3:	
-			  selectElement = new Select( (new WebDriverWait(driver, 12))
-					  .until(ExpectedConditions.elementToBeClickable(By.id(locatorValue))));
-			  break;
+		case 0: 
+			selectElement =  new Select((new WebDriverWait(driver, 15))
+					.until(ExpectedConditions.elementToBeClickable(By.cssSelector(locatorValue))));
+			break;
+		case 1:	  
+			selectElement = new Select((new WebDriverWait(driver, 12))
+					.until(ExpectedConditions.elementToBeClickable(By.xpath(locatorValue))));
+			break;
+		case 2:	  
+			selectElement = new Select( (new WebDriverWait(driver, 12))
+					.until(ExpectedConditions.elementToBeClickable(By.name(locatorValue))));
+			break;
+		case 3:	
+			selectElement = new Select( (new WebDriverWait(driver, 12))
+					.until(ExpectedConditions.elementToBeClickable(By.id(locatorValue))));
+			break;
 		}
 		return selectElement;
 	}
